@@ -1,26 +1,27 @@
 # pipeline.py
 import os
 import pandas as pd
-from clean_text import clean_text
 from data_loader import load_dataset
+from clean_text import clean_text
+from feature_extraction import extract_features
 
-def preprocess_pipeline(dataset_dir: str, output_csv: str):
+OUTPUT_PATH = os.path.join("ml_model", "dataset", "3", "preprocessed_dataset.csv")
+
+def preprocess_pipeline():
     """
-    Loads all CSV files from a directory, preprocesses the content, and writes to a new CSV.
+    Load dataset, extract features, clean text, and save processed data.
     """
-    all_files = [os.path.join(dataset_dir, f) for f in os.listdir(dataset_dir) if f.endswith('.csv')]
-    dfs = []
-    for file in all_files:
-        df = pd.read_csv(file)
-        # Assuming a 'content' column exists
-        df['cleaned_content'] = df['content'].apply(clean_text)
-        dfs.append(df)
-    final_df = pd.concat(dfs, ignore_index=True)
-    final_df.to_csv(output_csv, index=False)
-    print(f"Preprocessed dataset saved to {output_csv}")
+    df = load_dataset()
+
+    # Extract additional features
+    df = extract_features(df)
+
+    # Clean text
+    df["cleaned_text"] = df["text"].apply(clean_text)
+
+    # Save processed dataset
+    df.to_csv(OUTPUT_PATH, index=False)
+    print(f"Preprocessed dataset saved to {OUTPUT_PATH}")
 
 if __name__ == "__main__":
-    # Example usage: Merge and preprocess all datasets in ml_model/dataset/2/
-    dataset_directory = os.path.join("ml_model", "dataset", "2")
-    output_file = os.path.join(dataset_directory, "preprocessed_dataset.csv")
-    preprocess_pipeline(dataset_directory, output_file)
+    preprocess_pipeline()

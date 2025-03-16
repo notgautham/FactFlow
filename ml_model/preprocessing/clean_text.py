@@ -1,27 +1,24 @@
+# clean_text.py
 import re
 import spacy
 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_sm")  # Use SpaCy for tokenization & lemmatization
 
-def remove_html_tags(text: str) -> str:
-    """Remove HTML tags using regex."""
-    clean = re.compile('<.*?>')
-    return re.sub(clean, '', text)
-
-def clean_text(text: str) -> str:
+def clean_text(text):
     """
-    Clean and preprocess the input text.
-    - Remove HTML tags
-    - Lowercase text
-    - Tokenize and lemmatize using spaCy
-    - Remove stop words
+    Cleans text: removes special characters, tokenizes, and lemmatizes.
+    Does NOT lowercase everything to preserve uppercase word analysis.
     """
-    text = remove_html_tags(text)
-    text = text.lower()
+    text = re.sub(r'\s+', ' ', text)  # Remove extra spaces
+    text = re.sub(r'http\S+', '', text)  # Remove URLs
+    text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remove special characters
     doc = nlp(text)
-    tokens = [token.lemma_ for token in doc if not token.is_stop and token.is_alpha]
+    
+    # Lemmatize words
+    tokens = [token.lemma_ for token in doc if not token.is_stop]
+    
     return " ".join(tokens)
 
 if __name__ == "__main__":
-    sample = "<p>Breaking news: The <strong>quick</strong> brown fox jumps over the lazy dog!</p>"
-    print("Cleaned Text:", clean_text(sample))
+    sample_text = "BREAKING NEWS: This is a FAKE story with some REAL elements."
+    print("Cleaned Text:", clean_text(sample_text))

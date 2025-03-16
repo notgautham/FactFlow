@@ -1,23 +1,30 @@
 # data_loader.py
-# This module loads and merges datasets from the specified CSV files.
-
 import pandas as pd
 import os
 
-def load_dataset(path: str) -> pd.DataFrame:
+DATASET_PATH = os.path.join("ml_model", "dataset", "3")  # Ensure this matches your actual dataset location
+
+def load_dataset():
     """
-    Load a CSV dataset from the given path.
+    Loads the Fake and Real news datasets into a single DataFrame with labels.
     """
-    if os.path.exists(path):
-        return pd.read_csv(path)
-    else:
-        raise FileNotFoundError(f"{path} not found.")
+    fake_path = os.path.join(DATASET_PATH, "Fake.csv")
+    real_path = os.path.join(DATASET_PATH, "True.csv")
+
+    # Load datasets
+    df_fake = pd.read_csv(fake_path)
+    df_real = pd.read_csv(real_path)
+
+    # Add labels (1 = Fake, 0 = Real)
+    df_fake["label"] = 1
+    df_real["label"] = 0
+
+    # Combine datasets
+    df = pd.concat([df_fake, df_real], ignore_index=True)
+
+    return df
 
 if __name__ == "__main__":
-    # Example usage:
-    dataset_path = os.path.join(os.getcwd(), "ml_model", "dataset", "2", "expanded_dataset.csv")
-    try:
-        df = load_dataset(dataset_path)
-        print("Dataset loaded successfully with shape:", df.shape)
-    except Exception as e:
-        print(e)
+    df = load_dataset()
+    print("Dataset Loaded. Shape:", df.shape)
+    print(df.head())
