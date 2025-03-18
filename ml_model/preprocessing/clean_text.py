@@ -1,24 +1,21 @@
-# clean_text.py
+import pandas as pd
 import re
-import spacy
-
-nlp = spacy.load("en_core_web_sm")  # Use SpaCy for tokenization & lemmatization
+from transformers import AutoTokenizer
 
 def clean_text(text):
-    """
-    Cleans text: removes special characters, tokenizes, and lemmatizes.
-    Does NOT lowercase everything to preserve uppercase word analysis.
-    """
-    text = re.sub(r'\s+', ' ', text)  # Remove extra spaces
-    text = re.sub(r'http\S+', '', text)  # Remove URLs
-    text = re.sub(r'[^a-zA-Z\s]', '', text)  # Remove special characters
-    doc = nlp(text)
-    
-    # Lemmatize words
-    tokens = [token.lemma_ for token in doc if not token.is_stop]
-    
-    return " ".join(tokens)
+    """ Clean the input text. """
+    # Remove unwanted characters (URLs, special symbols)
+    text = re.sub(r'http\S+|www\S+|https\S+', '', text)  # Remove URLs
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  # Remove non-alphanumeric characters
+    return text
 
-if __name__ == "__main__":
-    sample_text = "BREAKING NEWS: This is a FAKE story with some REAL elements."
-    print("Cleaned Text:", clean_text(sample_text))
+def load_and_clean_data(file_path):
+    """ Load and clean the dataset. """
+    data = pd.read_csv(file_path)
+    data['cleaned_text'] = data['text'].apply(clean_text)
+    return data
+
+def get_tokenizer(model_name="roberta-base"):
+    """ Get tokenizer for the specified transformer model. """
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    return tokenizer

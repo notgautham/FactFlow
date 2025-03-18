@@ -1,19 +1,34 @@
-# content_model.py
-# Defines the content-based fake news detection model using a transformer architecture.
+import torch
+from transformers import AutoModelForSequenceClassification, Trainer, TrainingArguments
+from sklearn.model_selection import train_test_split
 
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+def get_model(model_name="roberta-base", num_labels=2):
+    """ Load the RoBERTa model for sequence classification. """
+    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=num_labels)
+    return model
 
-MODEL_NAME = "roberta-large"  # or "microsoft/deberta-v3-base" for a DeBERTa variant
+def train_model(model, train_dataset, val_dataset, tokenizer):  # Add tokenizer as a parameter
+    """ Fine-tune the model on the dataset. """
+    training_args = TrainingArguments(
+        output_dir='./results',
+        num_train_epochs=3,
+        per_device_train_batch_size=8,
+        per_device_eval_batch_size=8,
+        warmup_steps=500,
+        weight_decay=0.01,
+        logging_dir='./logs',
+        logging_steps=10,
+        evaluation_strategy="epoch",
+        save_strategy="epoch",
+    )
 
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=2)
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=train_dataset,
+        eval_dataset=val_dataset,
+        tokenizer=tokenizer,  # Use the tokenizer here
+    )
 
-def predict(text: str):
-    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
-    outputs = model(**inputs)
-    prediction = outputs.logits.argmax().item()
-    return prediction
-
-if __name__ == "__main__":
-    sample_text = "The quick brown fox jumps over the lazy dog!"
-    print("Prediction (0: Real, 1: Fake):", predict(sample_text))
+    trainer.train()
+    return trainer
