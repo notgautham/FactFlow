@@ -5,3 +5,11 @@
 {"time":"2025-03-19T01:14:09.8677803+05:30","level":"INFO","msg":"sender: started","stream_id":"gs2lbdxi"}
 {"time":"2025-03-19T01:14:09.8677803+05:30","level":"INFO","msg":"handler: started","stream_id":"gs2lbdxi"}
 {"time":"2025-03-19T01:14:10.5885584+05:30","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-19T01:28:09.6061555+05:30","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-19T01:28:09.6061555+05:30","level":"INFO","msg":"stream: closing","id":"gs2lbdxi"}
+{"time":"2025-03-19T01:28:09.6141475+05:30","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-19T01:28:11.5306159+05:30","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-19T01:28:12.3418668+05:30","level":"INFO","msg":"handler: closed","stream_id":"gs2lbdxi"}
+{"time":"2025-03-19T01:28:12.3419926+05:30","level":"INFO","msg":"writer: Close: closed","stream_id":"gs2lbdxi"}
+{"time":"2025-03-19T01:28:12.3419926+05:30","level":"INFO","msg":"sender: closed","stream_id":"gs2lbdxi"}
+{"time":"2025-03-19T01:28:12.3419926+05:30","level":"INFO","msg":"stream: closed","id":"gs2lbdxi"}

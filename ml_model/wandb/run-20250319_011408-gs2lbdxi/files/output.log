@@ -1,1 +1,33 @@
-  0%|                                                                                             | 3/15153 [01:05<86:46:04, 20.62s/it]
+  0%|▌                                                                                                           | 71/15153 [13:45<53:35:39, 12.79s/it]Traceback (most recent call last):
+{'loss': 0.6914, 'grad_norm': 2.5240163803100586, 'learning_rate': 1.0000000000000002e-06, 'epoch': 0.0}
+{'loss': 0.6965, 'grad_norm': 2.4773313999176025, 'learning_rate': 2.0000000000000003e-06, 'epoch': 0.0}
+{'loss': 0.6676, 'grad_norm': 1.3032429218292236, 'learning_rate': 3e-06, 'epoch': 0.01}
+{'loss': 0.6986, 'grad_norm': 5.948205471038818, 'learning_rate': 4.000000000000001e-06, 'epoch': 0.01}
+{'loss': 0.6683, 'grad_norm': 1.0565541982650757, 'learning_rate': 5e-06, 'epoch': 0.01}
+{'loss': 0.6881, 'grad_norm': 4.248739242553711, 'learning_rate': 6e-06, 'epoch': 0.01}
+{'loss': 0.6013, 'grad_norm': 5.143869400024414, 'learning_rate': 7.000000000000001e-06, 'epoch': 0.01}
+  File "C:\Gautham\Sem6\Project Course\FactFlow\train_model.py", line 22, in <module>
+    trainer = train_model(model, train_dataset, val_dataset, tokenizer)  # Pass tokenizer here
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\models\content_model.py", line 33, in train_model
+    trainer.train()
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\transformers\trainer.py", line 2241, in train
+    return inner_training_loop(
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\transformers\trainer.py", line 2599, in _inner_training_loop
+    self.optimizer.step()
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\accelerate\optimizer.py", line 178, in step
+    self.optimizer.step(closure)
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\torch\optim\lr_scheduler.py", line 140, in wrapper
+    return func.__get__(opt, opt.__class__)(*args, **kwargs)
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\torch\optim\optimizer.py", line 493, in wrapper
+    out = func(*args, **kwargs)
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\torch\optim\optimizer.py", line 91, in _use_grad
+    ret = func(self, *args, **kwargs)
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\torch\optim\adamw.py", line 243, in step
+    adamw(
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\torch\optim\optimizer.py", line 154, in maybe_fallback
+    return func(*args, **kwargs)
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\torch\optim\adamw.py", line 875, in adamw
+    func(
+  File "C:\Gautham\Sem6\Project Course\FactFlow\ml_model\venv\lib\site-packages\torch\optim\adamw.py", line 425, in _single_tensor_adamw
+    exp_avg.lerp_(grad, 1 - device_beta1)
+KeyboardInterrupt
