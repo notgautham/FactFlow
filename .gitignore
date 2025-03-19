@@ -1,1 +1,4 @@
 venv/
+wandb/
+/ml_model/model/
+/ml_model/results/
