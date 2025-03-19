@@ -11,3 +11,8 @@ It also reserves a folder for future integration of the DeepSeek API.
 
 ## Project Structure
 (See the docs/architecture.md file for a detailed explanation.)
+
+## Temp changes for test training with smaller dataset
+
+from train_model.py remove the lines marked by the specific comments
+from content_model.py modify  num_train_epochs=2 to 3
