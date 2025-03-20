@@ -1,17 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "FactFlow Fake News Detector",
+  "name": "FactFlow - Fake News Detector",
   "version": "1.0",
-  "description": "Detects fake news on visited webpages and displays verification results.",
-  "permissions": [
-    "activeTab",
-    "scripting"
-  ],
+  "description": "Detect fake news using AI.",
+  "permissions": ["scripting", "storage", "activeTab"],
+  "host_permissions": ["<all_urls>"],
   "background": {
-    "service_worker": "background/background.js"
+    "service_worker": "background.js"
   },
   "action": {
-    "default_popup": "extension/frontend/public/index.html",
+    "default_popup": "dist/index.html",
     "default_icon": "icons/icon.png"
   },
   "content_scripts": [
