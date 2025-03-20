@@ -11,7 +11,7 @@ def train_model(model, train_dataset, val_dataset, tokenizer):  # Add tokenizer 
     """ Fine-tune the model on the dataset. """
     training_args = TrainingArguments(
         output_dir='./results',
-        num_train_epochs=2,  #to be changed to 3 when training full dataset
+        num_train_epochs=3,  # Adjust epochs for full dataset
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         warmup_steps=500,
@@ -20,6 +20,7 @@ def train_model(model, train_dataset, val_dataset, tokenizer):  # Add tokenizer 
         logging_steps=10,
         evaluation_strategy="epoch",
         save_strategy="epoch",
+        report_to="none",  # Disable W&B logging
     )
 
     trainer = Trainer(

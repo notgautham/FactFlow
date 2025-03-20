@@ -5,6 +5,19 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 import torch
 
+def add_fake_news_features(data):
+    """Extract additional fake news features such as clickbait words and punctuation usage."""
+    clickbait_words = ["shocking", "breaking", "secret", "exposed", "you won’t believe", "must see"]
+    
+    # Count how many clickbait words appear
+    data["clickbait_score"] = data["cleaned_text"].apply(lambda x: sum(1 for word in clickbait_words if word in x.lower()))
+    
+    # Count how many exclamation/question marks appear
+    data["exclamation_count"] = data["cleaned_text"].apply(lambda x: x.count("!"))
+    data["question_count"] = data["cleaned_text"].apply(lambda x: x.count("?"))
+    
+    return data
+
 def load_data(fake_file, true_file):
     fake_data = load_and_clean_data(fake_file)
     true_data = load_and_clean_data(true_file)
@@ -16,10 +29,13 @@ def load_data(fake_file, true_file):
     # Combine both datasets
     data = pd.concat([fake_data[['cleaned_text', 'label']], true_data[['cleaned_text', 'label']]], ignore_index=True)
     
+    # Add fake news features (clickbait, punctuation counts)
+    data = add_fake_news_features(data)
+    
     return data
 
 def prepare_dataset(data, tokenizer):
-    """ Prepare the dataset by tokenizing the text and splitting into train/test. """
+    """Prepare the dataset by tokenizing the text and splitting into train/test."""
     encodings = tokenize_data(data['cleaned_text'], tokenizer)
     labels = torch.tensor(data['label'].values)
     
