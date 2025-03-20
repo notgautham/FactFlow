@@ -1,6 +1,5 @@
-// background.js
-// Handles background tasks for the browser extension.
-
+// background/background.js
 chrome.runtime.onInstalled.addListener(() => {
-    console.log("Fake News Detector extension installed.");
-});
+    console.log("FactFlow extension installed.");
+  });
+  
