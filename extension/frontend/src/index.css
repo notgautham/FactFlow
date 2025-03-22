@@ -76,6 +76,10 @@ button:focus-visible {
 
 @layer base {
   :root {
+    --background: theme(colors.slate.50);
+    --foreground: theme(colors.slate.900);
+    --accent: theme(colors.violet.500);
+    --accent-hover: theme(colors.violet.600);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -103,6 +107,10 @@ button:focus-visible {
     --radius: 0.5rem;
   }
   .dark {
+    --background: theme(colors.slate.900);
+    --foreground: theme(colors.slate.100);
+    --accent: theme(colors.violet.500);
+    --accent-hover: theme(colors.violet.600);
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
