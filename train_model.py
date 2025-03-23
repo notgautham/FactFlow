@@ -1,32 +1,47 @@
 import sys
 import os
+import pandas as pd
+import torch
+from sklearn.model_selection import train_test_split
+from transformers import AutoTokenizer
 
 # Add the 'ml_model' folder to the Python path
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ml_model'))
 
-from preprocessing.data_loader import load_data, prepare_dataset
 from models.content_model import get_model, train_model
-from transformers import AutoTokenizer
+from preprocessing.feature_extraction import tokenize_data
 
-# Load the tokenizer and model
+# Load dataset
+data_path = "./ml_model/dataset/3.3/styled_fake_and_real_15k.csv"
+df = pd.read_csv(data_path).dropna()
+
+# Tokenizer and model setup
 tokenizer = AutoTokenizer.from_pretrained("roberta-base")
 model = get_model("roberta-base", num_labels=2)
 
-# Updated file paths to use the enhanced dataset
-fake_file = "./ml_model/dataset/3.2/Fake_enhanced_v2.csv"
-true_file = "./ml_model/dataset/3/True.csv"
+# Tokenize
+encodings = tokenize_data(df["text"].tolist(), tokenizer)
+labels = torch.tensor(df["label"].values)
 
-# Load and preprocess the data
-data = load_data(fake_file, true_file)
-# Sample a smaller dataset
-data = data.sample(n=1000, random_state=42)  # Try 1000–3000 samples max
+# Train/Val split
+train_input_ids, val_input_ids, train_attention_mask, val_attention_mask, train_labels, val_labels = train_test_split(
+    encodings['input_ids'], encodings['attention_mask'], labels, test_size=0.1, random_state=42
+)
 
+from datasets import Dataset
 
-# Prepare dataset using full data
-train_dataset, val_dataset = prepare_dataset(data, tokenizer)
+train_dataset = Dataset.from_dict({
+    'input_ids': train_input_ids,
+    'attention_mask': train_attention_mask,
+    'labels': train_labels
+})
 
-# Train the model
+val_dataset = Dataset.from_dict({
+    'input_ids': val_input_ids,
+    'attention_mask': val_attention_mask,
+    'labels': val_labels
+})
+
+# Train and save model
 trainer = train_model(model, train_dataset, val_dataset, tokenizer)
-
-# Save the model
 trainer.save_model("./model")
