@@ -1,27 +1,16 @@
-# pipeline.py
+# pipeline.py — Optional CLI wrapper for debugging the data pipeline
 import os
-import pandas as pd
-from data_loader import load_dataset
-from clean_text import clean_text
-from feature_extraction import extract_features
-
-OUTPUT_PATH = os.path.join("ml_model", "dataset", "3", "preprocessed_dataset.csv")
-
-def preprocess_pipeline():
-    """
-    Load dataset, extract features, clean text, and save processed data.
-    """
-    df = load_dataset()
-
-    # Extract additional features
-    df = extract_features(df)
-
-    # Clean text
-    df["cleaned_text"] = df["text"].apply(clean_text)
-
-    # Save processed dataset
-    df.to_csv(OUTPUT_PATH, index=False)
-    print(f"Preprocessed dataset saved to {OUTPUT_PATH}")
+from preprocessing.data_loader import load_data
+from preprocessing.clean_text import get_tokenizer
 
 if __name__ == "__main__":
-    preprocess_pipeline()
+    fake_file = "./ml_model/dataset/3.2/Fake_enhanced_v2.csv"
+    true_file = "./ml_model/dataset/3/True.csv"
+
+    tokenizer = get_tokenizer("roberta-base")
+
+    data = load_data(fake_file, true_file)
+
+    print("✅ Dataset Loaded Successfully")
+    print("Sample Data:\n", data.sample(3))
+    print("\nLabel Distribution:\n", data['label'].value_counts())

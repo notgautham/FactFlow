@@ -7,11 +7,14 @@ def get_model(model_name="roberta-base", num_labels=2):
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=num_labels)
     return model
 
-def train_model(model, train_dataset, val_dataset, tokenizer):  # Add tokenizer as a parameter
-    """ Fine-tune the model on the dataset. """
+def train_model(model, train_dataset, val_dataset, tokenizer):
+    """
+    Fine-tune the model on the dataset using Hugging Face Trainer.
+    Tokenizer is included to enable preprocessing and evaluation logging.
+    """
     training_args = TrainingArguments(
         output_dir='./results',
-        num_train_epochs=3,  # Adjust epochs for full dataset
+        num_train_epochs=3,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         warmup_steps=500,
@@ -20,7 +23,7 @@ def train_model(model, train_dataset, val_dataset, tokenizer):  # Add tokenizer 
         logging_steps=10,
         evaluation_strategy="epoch",
         save_strategy="epoch",
-        report_to="none",  # Disable W&B logging
+        report_to="none",  # Disables default logging to W&B
     )
 
     trainer = Trainer(
@@ -28,7 +31,7 @@ def train_model(model, train_dataset, val_dataset, tokenizer):  # Add tokenizer 
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        tokenizer=tokenizer,  # Use the tokenizer here
+        tokenizer=tokenizer,
     )
 
     trainer.train()

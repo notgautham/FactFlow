@@ -1,5 +1,5 @@
 # trainer.py
-# Contains the training loop and hyperparameter tuning routines using Hugging Face Trainer and Optuna.
+# Placeholder for future hyperparameter tuning or advanced training logic.
 
 from transformers import Trainer, TrainingArguments
 
@@ -23,4 +23,4 @@ def train_model(model, train_dataset, eval_dataset):
     trainer.train()
 
 if __name__ == "__main__":
-    print("Trainer module ready for integration with datasets and model.")
+    print("Trainer module ready for future enhancements.")
