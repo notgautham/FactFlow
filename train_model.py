@@ -12,7 +12,7 @@ from models.content_model import get_model, train_model
 from preprocessing.feature_extraction import tokenize_data
 
 # Load dataset
-data_path = "./ml_model/dataset/3.3/styled_fake_and_real_15k.csv"
+data_path = "./ml_model/dataset/3.3/styled_fake_and_real_8k.csv"
 df = pd.read_csv(data_path).dropna()
 
 # Tokenizer and model setup

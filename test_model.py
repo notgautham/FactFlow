@@ -21,15 +21,22 @@ def predict(text):
     label = "REAL" if predicted_class == 1 else "FAKE"
     print(f"\n🧠 Prediction: {label}")
     print(f"🔎 Confidence: {confidence:.2f}")
-    print(f"📄 Input: {text}")
+    #print(f"📄 Input: {text}")
 
 if __name__ == "__main__":
     # Example test cases
     sample_texts = [
-        "BREAKING: Scientists reveal shocking side effects of the new vaccine!",
-        "India's GDP growth projected at 7.2% by IMF this quarter!!!!!!!!!!!!!!.",
-        "You won't believe what this celebrity said about the president!!!",
-        "According to the World Health Organization, COVID-19 vaccines are safe and effective"
+        """BREAKING: Reports have emerged about cash being found at the residence of Delhi High Court Judge Yashwant Varma. While the official line is that a committee has been formed by the Supreme Court to investigate, the timing and manner of discovery has raised questions among legal observers.
+
+Union Law Minister Arjun Ram Meghwal commented on the matter, stating that “the committee will look into it,” but did not elaborate further. Some insiders have pointed out that this is not the first time such incidents have happened, though no direct accusations have been made.
+
+Sanitation workers reportedly found partially burnt ₹500 notes near the judge’s residence, which they said appeared unexpectedly during routine cleaning. “We found some small pieces,” one worker said. “We don’t really know where they came from.”
+
+Justice Varma has denied any wrongdoing and suggested that the incident may have been intended to harm his reputation. However, the room where the cash was allegedly found was not in the main house, but in a separate building nearby, which has added further speculation online.
+
+The judiciary has yet to make a final determination, but this development has already sparked discussions both in legal circles and on social media. Some legal experts believe the inquiry may reveal more about how such incidents are handled within the system.
+
+"""
     ]
 
     for text in sample_texts:
