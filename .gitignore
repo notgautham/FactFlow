@@ -1,3 +1,5 @@
 venv/
 wandb/
 /model
+/results
+/model_3class

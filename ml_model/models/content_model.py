@@ -1,17 +1,13 @@
 import torch
 from transformers import AutoModelForSequenceClassification, Trainer, TrainingArguments
-from sklearn.model_selection import train_test_split
 
-def get_model(model_name="roberta-base", num_labels=2):
-    """ Load the RoBERTa model for sequence classification. """
+def get_model(model_name="roberta-base", num_labels=3):
+    """ Load the RoBERTa model for 3-class sequence classification. """
     model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=num_labels)
     return model
 
 def train_model(model, train_dataset, val_dataset, tokenizer):
-    """
-    Fine-tune the model on the dataset using Hugging Face Trainer.
-    Tokenizer is included to enable preprocessing and evaluation logging.
-    """
+    """ Fine-tune the model using Hugging Face Trainer with label smoothing. """
     training_args = TrainingArguments(
         output_dir='./results',
         num_train_epochs=3,
@@ -23,7 +19,8 @@ def train_model(model, train_dataset, val_dataset, tokenizer):
         logging_steps=10,
         evaluation_strategy="epoch",
         save_strategy="epoch",
-        report_to="none",  # Disables default logging to W&B
+        report_to="none",
+        label_smoothing_factor=0.1  # prevents overconfidence
     )
 
     trainer = Trainer(
