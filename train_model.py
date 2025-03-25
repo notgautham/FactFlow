@@ -11,13 +11,13 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'ml_model'))
 from models.content_model import get_model, train_model
 from preprocessing.feature_extraction import tokenize_data
 
-# Load new 3-class dataset
-data_path = "./ml_model/dataset/3.6/fake_news_3class_8k_diverse.csv"
+# Load the final 15k 3-class dataset
+data_path = "./ml_model/dataset/3.9/fake_news_3class_15k_final.csv"
 df = pd.read_csv(data_path).dropna()
 
 # Tokenizer and model setup
 tokenizer = AutoTokenizer.from_pretrained("roberta-base")
-model = get_model("roberta-base", num_labels=3)  # 3-class output
+model = get_model("roberta-base", num_labels=3)
 
 # Tokenize
 encodings = tokenize_data(df["text"].tolist(), tokenizer)
@@ -42,6 +42,6 @@ val_dataset = Dataset.from_dict({
     'labels': val_labels
 })
 
-# Train and save the model (stored in /model_3class/)
+# Train and save the model in new folder
 trainer = train_model(model, train_dataset, val_dataset, tokenizer)
-trainer.save_model("./model_3class")
+trainer.save_model("./model_3class_v2")
