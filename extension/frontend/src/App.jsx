@@ -16,6 +16,8 @@ const AppContent = () => {
     setTheme(isDarkMode ? "dark" : "light");
   }, [isDarkMode, setTheme]);
 
+  
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-background text-foreground font-sans">
       <div className="w-[350px] rounded-xl border border-violet-500 shadow-md p-4 bg-card space-y-4">
@@ -70,6 +72,27 @@ const AppContent = () => {
     </div>
   );
 };
+
+chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  chrome.tabs.sendMessage(
+    tabs[0].id,
+    { action: "SCRAPE_TEXT" },
+    async (response) => {
+      const scrapedText = response.scrapedText;
+
+      // Send it to your backend for processing
+      const res = await fetch("http://localhost:5000/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: scrapedText, url: tabs[0].url })
+      });
+
+      const result = await res.json();
+      // Display result in UI
+    }
+  );
+});
+
 
 const App = () => {
   return (

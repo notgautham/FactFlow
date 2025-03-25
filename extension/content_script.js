@@ -1,5 +1,14 @@
-console.log("FactFlow Content Script Running");
+// content_script.js
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("Page Loaded: Running FactFlow Analysis");
+function extractVisibleText() {
+  const bodyText = document.body.innerText;
+  return bodyText;
+}
+
+// Listen for messages from background/popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "SCRAPE_TEXT") {
+    const text = extractVisibleText();
+    sendResponse({ scrapedText: text });
+  }
 });

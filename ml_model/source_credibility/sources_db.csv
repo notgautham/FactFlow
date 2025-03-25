@@ -1,0 +1,21 @@
+domain,credibility_rating,bias,score,source,reason
+nytimes.com,High,Left,95,AllSides,Established outlet with rigorous editorial standards.
+cnn.com,High,Left-Center,90,MBFC,"Well-sourced and factual, though sometimes opinion-heavy."
+foxnews.com,Medium,Right,70,AllSides,Mix of factual reporting and opinion-based content.
+msnbc.com,Medium,Left,75,MBFC,Opinionated coverage but generally based on factual sources.
+reuters.com,High,Center,96,MBFC,Factual and unbiased international reporting.
+theguardian.com,High,Left,90,NewsGuard,Transparent editorial policies and sourcing.
+theonion.com,Satire,Center-Left,5,MBFC,"Clearly labeled satire, not intended to be factual."
+breitbart.com,Low,Far Right,25,MBFC,Frequently publishes misleading content and conspiracy theories.
+infowars.com,Low,Far Right,10,MBFC,Known for promoting conspiracy theories and disinformation.
+npr.org,High,Left-Center,92,AllSides,Well-sourced with minimal bias.
+wsj.com,High,Right-Center,90,AllSides,Fact-based reporting with a conservative editorial section.
+forbes.com,High,Center-Right,88,NewsGuard,Factual business reporting with some opinion.
+huffpost.com,Medium,Left,70,MBFC,Opinion-heavy but generally well-sourced.
+dailycaller.com,Low,Right,30,MBFC,Poor sourcing and misinformation history.
+buzzfeednews.com,Medium,Left,65,NewsGuard,Mixed reputation; combines journalism with viral content.
+naturalnews.com,Low,Far Right,12,MBFC,Pseudoscience and conspiracy theory site.
+aljazeera.com,High,Center,85,NewsGuard,International news with a generally balanced tone.
+rt.com,Low,Far Left,20,MBFC,State-controlled media with propaganda tendencies.
+theepochtimes.com,Low,Right,28,MBFC,Questionable sources and conspiracy content.
+usatoday.com,High,Center,85,NewsGuard,Fact-based reporting and national coverage.
