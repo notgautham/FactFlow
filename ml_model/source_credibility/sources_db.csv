@@ -1,21 +1,112 @@
 domain,credibility_rating,bias,score,source,reason
+abc.net.au,High,Center-Left,89,MBFC,"Australia’s national broadcaster, known for neutrality."
+aljazeera.com,High,Center,86,MBFC,International news agency with reliable reporting.
+apnews.com,High,Center,95,MBFC,Unbiased newswire with factual reporting.
+bbc.com,High,Center,94,MBFC,Globally respected public broadcaster with strong factual reporting.
+beforeitsnews.com,Low,Conspiracy,8,MBFC,Frequently spreads disinformation and pseudoscience.
+bloomberg.com,High,Center,91,MBFC,Business and political coverage with high reliability.
+boomlive.in,High,Center,90,MBFC,Fact-checking organization focused on misinformation.
+breitbart.com,Low,Far Right,30,MBFC,Promotes conspiracy theories and biased content.
+business-standard.com,High,Center,87,MBFC,Well-respected Indian financial newspaper.
+cbc.ca,High,Center-Left,91,MBFC,Canadian public broadcaster with high standards.
+cnbc.com,High,Center-Right,89,MBFC,Financial news with strong editorial policies.
+cnn.com,Medium,Left,80,AllSides,Mix of factual reporting and opinion.
+dailywire.com,Low,Right,30,MBFC,Right-wing commentary site with low factual reporting history.
+deccanherald.com,High,Center,84,MBFC,Respected regional newspaper with quality journalism.
+dnaindia.com,Medium,Right,65,MBFC,Moderate reliability with occasional bias.
+dw.com,High,Center,90,MBFC,German public broadcaster with factual reporting.
+economist.com,High,Center-Right,90,MBFC,Data-driven reporting with minimal bias.
+forbes.com,High,Center-Right,88,MBFC,Respected business news outlet.
+foxnews.com,Medium,Right,70,AllSides,Conservative slant with mix of opinion and news.
+freepressjournal.in,Medium,Center,70,MBFC,"Decent reliability, occasional inconsistencies."
+ft.com,High,Center-Right,92,MBFC,Financial Times is known for accurate business news.
+globalnews.ca,High,Center,88,MBFC,Canadian news organization with factual content.
+hindustantimes.com,High,Center,85,MBFC,Mainstream newspaper with balanced reporting.
+indianexpress.com,High,Center,88,MBFC,Well-sourced coverage of politics and current affairs.
+infowars.com,Low,Far Right,10,MBFC,Known for publishing conspiracy theories.
+lemonde.fr,High,Center-Left,90,MBFC,Leading French newspaper with high editorial standards.
+livemint.com,High,Center,88,MBFC,Business-focused reporting with accuracy.
+msnbc.com,Medium,Left,75,MBFC,Opinion-based programs with factual content.
+ndtv.com,High,Center,85,MBFC,Trusted Indian TV and web news platform.
+news18.com,Medium,Right,68,MBFC,Mainstream outlet with occasional political bias.
+newyorker.com,High,Left,85,MBFC,Commentary and investigative journalism.
+npr.org,High,Left-Center,92,MBFC,Publicly funded media with a focus on factual reporting.
 nytimes.com,High,Left,95,AllSides,Established outlet with rigorous editorial standards.
-cnn.com,High,Left-Center,90,MBFC,"Well-sourced and factual, though sometimes opinion-heavy."
-foxnews.com,Medium,Right,70,AllSides,Mix of factual reporting and opinion-based content.
-msnbc.com,Medium,Left,75,MBFC,Opinionated coverage but generally based on factual sources.
-reuters.com,High,Center,96,MBFC,Factual and unbiased international reporting.
-theguardian.com,High,Left,90,NewsGuard,Transparent editorial policies and sourcing.
-theonion.com,Satire,Center-Left,5,MBFC,"Clearly labeled satire, not intended to be factual."
-breitbart.com,Low,Far Right,25,MBFC,Frequently publishes misleading content and conspiracy theories.
-infowars.com,Low,Far Right,10,MBFC,Known for promoting conspiracy theories and disinformation.
-npr.org,High,Left-Center,92,AllSides,Well-sourced with minimal bias.
-wsj.com,High,Right-Center,90,AllSides,Fact-based reporting with a conservative editorial section.
-forbes.com,High,Center-Right,88,NewsGuard,Factual business reporting with some opinion.
-huffpost.com,Medium,Left,70,MBFC,Opinion-heavy but generally well-sourced.
-dailycaller.com,Low,Right,30,MBFC,Poor sourcing and misinformation history.
-buzzfeednews.com,Medium,Left,65,NewsGuard,Mixed reputation; combines journalism with viral content.
-naturalnews.com,Low,Far Right,12,MBFC,Pseudoscience and conspiracy theory site.
-aljazeera.com,High,Center,85,NewsGuard,International news with a generally balanced tone.
-rt.com,Low,Far Left,20,MBFC,State-controlled media with propaganda tendencies.
-theepochtimes.com,Low,Right,28,MBFC,Questionable sources and conspiracy content.
-usatoday.com,High,Center,85,NewsGuard,Fact-based reporting and national coverage.
+opindia.com,Low,Right,30,MBFC,Often criticized for misinformation and biased coverage.
+pbs.org,High,Center-Left,92,MBFC,Public media outlet with factual reporting.
+politico.com,High,Center-Left,87,MBFC,Known for accurate and analytical political reporting.
+propublica.org,High,Center-Left,93,MBFC,Investigative journalism with strong sourcing.
+republicworld.com,Medium,Right,60,MBFC,Strong political bias and sensationalist tone.
+reuters.com,High,Center,96,MBFC,Highly factual international news service.
+rt.com,Low,Far Left,20,MBFC,State-run media outlet known for propaganda.
+scroll.in,High,Left,80,MBFC,Independent journalism with factual reporting.
+sky.com,High,Center,87,MBFC,UK-based source with reliable news coverage.
+sputniknews.com,Low,Far Left,20,MBFC,Russian state-controlled outlet known for propaganda.
+swarajyamag.com,Low,Right,35,MBFC,Known for ideological bias and mixed factual reporting.
+theatlantic.com,High,Left,88,MBFC,Long-form journalism and in-depth analysis.
+thedailymash.co.uk,Satire,Center,5,MBFC,Satirical UK-based news parody site.
+thegatewaypundit.com,Low,Far Right,15,MBFC,Highly questionable content and sources.
+thehindu.com,High,Center-Left,90,MBFC,Reputable Indian national newspaper with factual reporting.
+theonion.com,Satire,Left,5,MBFC,"Well-known satire site, not intended to be factual."
+theprint.in,High,Center,85,MBFC,Modern Indian news platform with strong editorial standards.
+timesnownews.com,Medium,Right,65,MBFC,Opinion-heavy prime time debates and coverage.
+tribuneindia.com,High,Center,85,MBFC,Mainstream Indian newspaper with regional focus.
+usatoday.com,High,Center,85,MBFC,General news with low bias and high factuality.
+vox.com,Medium,Left,75,MBFC,Explainer journalism with some editorial bias.
+washingtonpost.com,High,Left,94,AllSides,Award-winning journalism with factual reporting.
+yournewswire.com,Low,Conspiracy,10,MBFC,Publishes fake news and conspiracy theories.
+zerohedge.com,Low,Right,40,MBFC,Known for market analysis with conspiratorial tone.
+moneycontrol.com,High,Center,88,MBFC,India's leading financial news portal with factual reporting.
+investopedia.com,High,Center,90,MBFC,Well-respected educational resource for finance and investing.
+techcrunch.com,High,Center,86,MBFC,Accurate coverage of startups and tech innovation.
+gadgets360.com,High,Center,84,MBFC,Reliable Indian tech and gadget news platform.
+cnbctv18.com,High,Center,87,MBFC,Leading Indian business and financial news channel.
+marketwatch.com,High,Center,89,MBFC,Covers business and markets with strong factual reporting.
+mint.com,High,Center,87,MBFC,Reputable Indian financial news outlet.
+businesstoday.in,High,Center,85,MBFC,Covers Indian business and economy topics reliably.
+etnownews.com,High,Center,86,MBFC,"Focused on markets and finance, owned by Times Network."
+moneytoday.in,High,Center,84,MBFC,Indian personal finance portal with accurate content.
+inc42.com,High,Center,83,MBFC,Focused on Indian startups and digital economy.
+wired.com,High,Center-Left,88,MBFC,"Trusted coverage of tech, science, and society."
+engadget.com,High,Center,84,MBFC,Reputable tech reviews and coverage platform.
+thenextweb.com,High,Center,85,MBFC,Global tech news platform focused on innovation.
+zacks.com,High,Center,86,MBFC,Financial analysis and stock forecasting with data-driven insights.
+barrons.com,High,Center,89,MBFC,Authoritative voice in financial investment reporting.
+bgr.in,Medium,Center,75,MBFC,Covers tech and mobile news in India with moderate reliability.
+digit.in,High,Center,83,MBFC,Indian tech review platform with mostly accurate reporting.
+techradar.com,High,Center,84,MBFC,Global tech and gadget reviews platform.
+zeenews.india.com,Medium,Right,65,MBFC,Mainstream Indian channel with some political bias.
+indiatoday.in,High,Center,85,MBFC,Popular Indian news magazine with generally factual content.
+newindianexpress.com,High,Center,84,MBFC,Regional news outlet with high factual reporting.
+jagran.com,Medium,Right,70,MBFC,Popular Hindi-language outlet with mixed credibility.
+patrika.com,Medium,Right,68,MBFC,Hindi regional outlet with moderate trustworthiness.
+firstpost.com,Medium,Right,72,MBFC,Indian portal with opinion-heavy reporting.
+thequint.com,High,Left,82,MBFC,Digital-first platform with factual investigations.
+thewire.in,High,Left,83,MBFC,Known for investigative journalism with left-leaning perspective.
+thebetterindia.com,High,Center,85,MBFC,Positive journalism focused on innovation and social change.
+factchecker.in,High,Center,90,MBFC,Dedicated to fact-checking Indian news and misinformation.
+health.economictimes.indiatimes.com,High,Center,86,MBFC,Health-focused content from Economic Times group.
+medicaldialogues.in,High,Center,88,MBFC,Focused on Indian healthcare professionals and accurate reporting.
+ndtv.com/health,High,Center,85,MBFC,Health and wellness coverage from NDTV's health section.
+researchmatters.in,High,Center,87,MBFC,Indian science and research communication platform.
+downToEarth.org.in,High,Center,88,MBFC,"Covers science, environment, and sustainability issues in India."
+indiapost.com,Medium,Center,70,MBFC,Indian-American diaspora publication with moderate credibility.
+indiatvnews.com,Medium,Right,68,MBFC,Popular Hindi news channel with some sensational content.
+newslaundry.com,High,Left,85,MBFC,Indian media watchdog and investigative outlet.
+gaurilankeshnews.com,High,Left,80,MBFC,Independent progressive media with investigative journalism.
+boomlive.in/fact-check,High,Center,90,MBFC,Fact-checking initiative in India with strong reputation.
+factly.in,High,Center,89,MBFC,Indian data journalism and public information verification.
+altnews.in,High,Left,88,MBFC,Popular Indian fact-checking website with political focus.
+thelogicalindian.com,High,Center-Left,84,MBFC,Civic journalism platform with verified content.
+factcrescendo.com,High,Center,87,MBFC,Indian multilingual fact-checking organization.
+sciencedaily.com,High,Center,92,MBFC,Respected aggregator for scientific press releases and studies.
+medicalnewstoday.com,High,Center,90,MBFC,Well-known health and medical news provider.
+healthline.com,High,Center,91,MBFC,Trusted site for health and wellness information.
+verywellhealth.com,High,Center,89,MBFC,Medical review board-approved content on health topics.
+nature.com,High,Center,95,MBFC,One of the world's most cited peer-reviewed scientific journals.
+thehindu.com/sci-tech,High,Center,90,MBFC,Science and technology section of The Hindu.
+hindawi.com,High,Center,88,MBFC,Open access scholarly publisher with peer-reviewed journals.
+thelancet.com,High,Center,96,MBFC,Renowned medical journal with global impact.
+factcheck.org,High,Least Biased,91,MBFC,FactCheck.org is dedicated to non-partisan fact-checking and relies on credible sources with a clean fact-check record. They maintain high journalistic standards.
+news.yahoo.com,High,Left-Center,73,MBFC,"Yahoo News generally uses credible sources; however, they do publish a variety of opinions that sometimes utilize poor sources. Yahoo News is rated Left-Center due to story selection and some opinion content that favors the left."
+x.com,Mixed,Right,38,MBFC,"A website that lacks complete transparency, has failed fact checks, and is associated with a source that holds opinions that greatly differ from fact-based reporting. Some stories rely on opinion."

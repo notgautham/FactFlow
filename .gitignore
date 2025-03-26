@@ -4,3 +4,4 @@ wandb/
 model_3class/
 model_3class_v2/
 model/
+.env
