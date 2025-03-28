@@ -26,6 +26,14 @@ module.exports = {
           muted: "hsl(var(--muted-foreground))",
         },
       },
+      animation: {
+        'spin-slow': 'spin 1.5s linear infinite',
+      },
+
+      rotate: {
+        '-90': '-90deg',
+      },
+
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
