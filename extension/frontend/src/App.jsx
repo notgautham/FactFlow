@@ -29,6 +29,33 @@ const AppContent = () => {
   const [progress, setProgress] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [scrapedText, setScrapedText] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Call this when user clicks Analyze
+  const handleAnalyzeClick = () => {
+    setIsAnalyzing(true);
+    setProgress(0);
+    animateProgress();
+
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.type === "SCRAPED_TEXT") {
+        console.log("Scraped content received:", message.data);
+        setScrapedText(message.data);
+      }
+    });
+  };
+
+  // For demo: Animate fake loading progress
+  const animateProgress = () => {
+    let i = 0;
+    const interval = setInterval(() => {
+      i += 1;
+      setProgress(i);
+      if (i >= 100) clearInterval(interval);
+    }, 25);
+  };
+
   
 
   useEffect(() => {

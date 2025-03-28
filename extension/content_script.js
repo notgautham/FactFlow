@@ -12,3 +12,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse({ scrapedText: text });
   }
 });
+
+console.log("✅ FactFlow content script loaded.");
+
