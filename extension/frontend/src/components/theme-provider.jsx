@@ -1,24 +1,16 @@
-import { createContext, useContext, useEffect, useState } from "react";
+'use client';
 
-const ThemeContext = createContext();
+import * as React from 'react';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("dark");
-
-  useEffect(() => {
-    document.documentElement.classList.remove("dark", "light");
-    document.documentElement.classList.add(theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
+export function ThemeProvider({ children, defaultTheme = 'dark' }) {
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme={defaultTheme}
+      enableSystem={false}
+    >
       {children}
-    </ThemeContext.Provider>
+    </NextThemesProvider>
   );
-};
-
-export const useTheme = () => useContext(ThemeContext);
+}

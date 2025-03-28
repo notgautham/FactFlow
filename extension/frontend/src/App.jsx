@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { ThemeProvider, useTheme } from "@/components/theme-provider";
+//import { ThemeProvider, useTheme } from "@/components/theme-provider";
 import CircularProgress from "@/components/ui/circular-progress";
+import { ThemeProvider } from "@/components/theme-provider";
+import { useTheme } from "next-themes";
+
 import {
   Card,
   CardContent,
@@ -21,11 +24,12 @@ const LoadingTasks = [
 ];
 
 const AppContent = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  
 
   useEffect(() => {
     let interval;
@@ -56,14 +60,14 @@ const AppContent = () => {
   };
 
   return (
-    <div className="min-h-[400px] w-[230px] px-4 py-6 bg-background text-foreground rounded-xl border border-violet-500 shadow-lg flex flex-col justify-between transition-all duration-500">
+    <div className="min-h-[400px] w-[300px] px-3 py-3 bg-background text-foreground rounded-xl border border-violet-500 shadow-lg flex flex-col justify-between transition-all duration-500 mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-[28px] font-semibold tracking-tight bg-gradient-to-r from-violet-400 to-violet-600 text-transparent bg-clip-text transition-all hover:scale-110 hover:brightness-125">
+      <div className="flex items-center justify-between mb-4 px-1">
+        <h1 className="text-[30px] font-semibold tracking-tight bg-gradient-to-r from-violet-400 to-violet-600 text-transparent bg-clip-text transition-all hover:scale-110 hover:brightness-125">
           FactFlow
         </h1>
         <button
-          onClick={toggleTheme}
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className="border p-1.5 rounded-md hover:bg-muted transition"
           aria-label="Toggle Theme"
         >
@@ -72,7 +76,7 @@ const AppContent = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col gap-4 items-center justify-center text-center">
+      <div className="flex-1 flex flex-col gap-4 items-center justify-center text-center px-2">
         {!loading && !showResult && (
           <>
             <p className="text-base font-medium text-muted-foreground hover:text-violet-400 transition">
@@ -93,12 +97,9 @@ const AppContent = () => {
         )}
 
         {loading && (
-          <div className="w-full animate-in fade-in duration-500">
+          <div className="w-full animate-in fade-in duration-500 px-1">
             <CardHeader>
               <CardTitle className="text-lg">Analyzing Page...</CardTitle>
-              <CardDescription className="text-sm">
-                {LoadingTasks[taskIndex]}
-              </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center space-y-2 mt-2">
               <CircularProgress progress={progress} />
@@ -110,7 +111,7 @@ const AppContent = () => {
         )}
 
         {showResult && (
-          <Card className="w-full animate-in fade-in duration-500">
+          <Card className="w-full animate-in fade-in duration-500 px-1">
             <CardHeader>
               <CardTitle className="text-lg">Credibility Score</CardTitle>
               <CardDescription className="text-sm">
@@ -133,11 +134,11 @@ const AppContent = () => {
       </div>
 
       {/* Footer / CTA */}
-      <div className="mt-6 flex flex-col items-center gap-2">
+      <div className="mt-6 flex flex-col items-center gap-2 px-1">
         {!loading && !showResult && (
           <Button
             onClick={handleAnalyze}
-            className="group w-full bg-violet-600 hover:bg-violet-700 transition-all relative overflow-hidden"
+            className="group w-[90%] bg-violet-600 hover:bg-violet-700 transition-all relative overflow-hidden"
           >
             <span className="relative z-10">Analyze Page</span>
             <span className="absolute inset-0 bg-violet-300 opacity-0 group-hover:opacity-20 blur-md transition-all duration-500" />
