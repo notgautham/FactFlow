@@ -31,7 +31,7 @@ const AppContent = () => {
   const [showResult, setShowResult] = useState(false);
   const [scrapedText, setScrapedText] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const showDebugInfo = true; // Toggle this off for production
+  const showDebugInfo = false; // Toggle this off for production
 
 
   // For demo: Animate fake loading progress

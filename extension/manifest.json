@@ -15,7 +15,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content_script.js"],
+      "js": ["lib/readability.js", "content_script.js"],
       "run_at": "document_idle"
     }
   ],
