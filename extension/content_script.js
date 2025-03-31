@@ -14,4 +14,3 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 console.log("✅ FactFlow content script loaded.");
-

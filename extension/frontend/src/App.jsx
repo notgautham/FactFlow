@@ -31,20 +31,8 @@ const AppContent = () => {
   const [showResult, setShowResult] = useState(false);
   const [scrapedText, setScrapedText] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const showDebugInfo = true; // Toggle this off for production
 
-  // Call this when user clicks Analyze
-  const handleAnalyzeClick = () => {
-    setIsAnalyzing(true);
-    setProgress(0);
-    animateProgress();
-
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      if (message.type === "SCRAPED_TEXT") {
-        console.log("Scraped content received:", message.data);
-        setScrapedText(message.data);
-      }
-    });
-  };
 
   // For demo: Animate fake loading progress
   const animateProgress = () => {
@@ -84,6 +72,20 @@ const AppContent = () => {
     setTaskIndex(0);
     setShowResult(false);
     setLoading(true);
+
+    // Send message to content script
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: "SCRAPE_TEXT" }, (response) => {
+          if (response?.scrapedText) {
+            console.log("📄 Scraped text from page:", response.scrapedText.slice(0, 500)); // log first 500 chars
+            setScrapedText(response.scrapedText);
+          } else {
+            console.error("Failed to scrape text from content script.");
+          }
+        });
+      }
+    });
   };
 
   return (
@@ -134,8 +136,25 @@ const AppContent = () => {
                 {LoadingTasks[taskIndex]}
               </p>
             </CardContent>
+
+            {/* 🔍 Temporary Debug Section: Scraped Preview */}
+            {showDebugInfo && scrapedText && (
+              <Card className="mt-4 bg-muted/40 border border-muted-foreground/10 rounded-xl shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-sm">
+                    🔍 Scraped Text Preview (Dev Only)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground line-clamp-[10] whitespace-pre-wrap max-h-48 overflow-auto">
+                    {scrapedText}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </div>
         )}
+
 
         {showResult && (
           <Card className="w-full animate-in fade-in duration-500 px-1">
