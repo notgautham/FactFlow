@@ -1,10 +1,9 @@
 // content_script.js
 
-// Listen for message from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "SCRAPE_TEXT") {
     try {
-      // Clone the document for processing
+      // Clone document for readability
       const articleDoc = document.cloneNode(true);
       const reader = new Readability(articleDoc);
       const article = reader.parse();
@@ -13,32 +12,70 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const title = article?.title || document.title;
       const content = article?.content || "";
 
-      // Strip HTML tags from content
+      // Strip HTML tags
       const tempElement = document.createElement("div");
       tempElement.innerHTML = content;
       const plainText = tempElement.innerText.trim();
 
-      // ✅ Clean the domain URL
+      // Clean domain URL
       const fullUrl = window.location.href;
       const urlObj = new URL(fullUrl);
-      const hostname = urlObj.hostname.replace(/^www\./, ""); // removes 'www.'
-      const cleanedUrl = hostname; // final result: 'livemint.com'
+      const hostname = urlObj.hostname.replace(/^www\./, "");
+      const cleanedUrl = hostname;
 
-      console.log("[FactFlow] Title:", title);
-      console.log("[FactFlow] Cleaned Content:", plainText.slice(0, 3000));
-      console.log("[FactFlow] Domain URL:", cleanedUrl);
+      // 🗓️ Attempt to extract publish date from meta tags or page
+      let publishDate = "";
 
-      // Send response back to popup
+      const metaTags = [
+        'meta[property="article:published_time"]',
+        'meta[name="pubdate"]',
+        'meta[name="publish-date"]',
+        'meta[name="date"]',
+        'meta[itemprop="datePublished"]',
+      ];
+
+      for (const selector of metaTags) {
+        const tag = document.querySelector(selector);
+        if (tag?.content) {
+          publishDate = tag.content;
+          break;
+        }
+      }
+
+      // Fallback to regex
+      if (!publishDate) {
+        const bodyText = document.body.innerText;
+        const dateMatch = bodyText.match(
+          /\b(?:\d{1,2}[\/\-th|st|nd|rd\s]*)?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[\s,\-]*(?:\d{1,2}[,\s]*)?\d{4}\b/i
+        );
+        if (dateMatch) {
+          publishDate = dateMatch[0];
+        }
+      }
+
+      // Final fallback
+      publishDate = publishDate || "Not found";
+
+      // Prepend date to content text block
+      const formattedText = `[📅 Published On: ${publishDate}]\n\n${plainText}`;
+
       sendResponse({
-        scrapedText: `${title}\n\n${plainText}`,
+        scrapedText: `${title}\n\n${formattedText}`,
         domain: cleanedUrl,
+        publishDate: publishDate,
       });
+
+      // ✅ Logging for debug
+      console.log("[FactFlow] Title:", title);
+      console.log("[FactFlow] Cleaned Content:", formattedText.slice(0, 200));
+      console.log("[FactFlow] Domain URL:", cleanedUrl);
+      console.log("[FactFlow] Publish Date:", publishDate);
+
     } catch (error) {
       console.error("Readability failed:", error);
-      sendResponse({ scrapedText: "", domain: "" });
+      sendResponse({ scrapedText: "", domain: "", publishDate: "" });
     }
 
-    // Indicate async response
-    return true;
+    return true; // enable async sendResponse
   }
 });

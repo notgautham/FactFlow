@@ -17,12 +17,21 @@ def check_article_factuality(article_text):
     prompt_template = f"""
 You are a fact-checking expert. Carefully read the following news article and determine its factual accuracy.
 
+🗓️ Publication Date: It is given in the starting of the content
+
 Instructions:
-1. Identify the main claims or statements made in the article.
-2. Cross-check these claims against publicly available, trusted knowledge.
-3. Flag any factual errors or inconsistencies with clear explanations.
-4. If the article appears accurate, state that clearly.
-5. If you know that the same topic or claim has been reported by reputable news sources, list them under `supporting_sources`.
+1. Use the publication date above as your **current reference**. Assume this is the present day.
+2. Evaluate the claims in the article **as of that date** using your internal knowledge and reasoning.
+3. ONLY flag a claim as false if it is clearly, provably incorrect **based on known facts available as of that date**.
+4. ❌ DO NOT flag a claim as false if:
+   - You are unsure
+   - You don’t have enough information
+   - You cannot confirm or deny it
+   In those cases, **IGNORE** the claim and exclude it from the `issues` list.
+5. Do not include phrases like “requires verification” or “warrants confirmation” — these do not indicate factual errors.
+6. Include only clearly **false or contradictory** claims with their explanations.
+7. If the article is overall accurate and no false claims are found, return a verdict of `"factual"`.
+
 
 ⚠️ Output Format (strict JSON):
 {{

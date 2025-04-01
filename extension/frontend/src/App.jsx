@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import CircularProgress from "@/components/ui/circular-progress";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useTheme } from "next-themes";
+import ResultDetails from "./components/ResultDetails";
+
 
 import {
   Card,
@@ -32,6 +34,7 @@ const AppContent = () => {
   const [scrapedText, setScrapedText] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const showDebugInfo = false; // Toggle this off for production
+  const [resultData, setResultData] = useState(null);
 
 
   // For demo: Animate fake loading progress
@@ -72,21 +75,69 @@ const AppContent = () => {
     setTaskIndex(0);
     setShowResult(false);
     setLoading(true);
+    setResultData(null); // clear previous results
 
-    // Send message to content script
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: "SCRAPE_TEXT" }, (response) => {
-          if (response?.scrapedText) {
-            console.log("📄 Scraped text from page:", response.scrapedText.slice(0, 500)); // log first 500 chars
-            setScrapedText(response.scrapedText);
-          } else {
-            console.error("Failed to scrape text from content script.");
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          { action: "SCRAPE_TEXT" },
+          async (response) => {
+            if (response?.scrapedText && response?.domain) {
+              const [title, ...contentLines] = response.scrapedText.split("\n\n");
+              const content = contentLines.join("\n\n");
+              const url = "https://" + response.domain;
+
+              try {
+                const apiResponse = await fetch("http://127.0.0.1:8000/api/analyze", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ title, content, url }),
+                });
+
+                if (!apiResponse.ok) throw new Error("API error");
+
+                const data = await apiResponse.json();
+                console.log("✅ Raw API response (before animation):", data);
+                setResultData(data); // save result for rendering
+
+                // 👇 Layered simulation with visual + console output
+                let step = 0;
+                const interval = setInterval(() => {
+                  step += 1;
+                  setTaskIndex(step);
+                  setProgress(step * 33);  // 3 steps: 33%, 66%, 100%
+
+                  if (step === 3) {
+                    clearInterval(interval);
+                    setLoading(false);
+                    setShowResult(true);
+
+                    // ✅ Debug logs after result is ready
+                    console.log("✅ Full API Response:");
+                    console.log("👉 Verdict:", data.verdict);
+                    console.log("👉 Explanation:", data.explanation);
+                    console.log("🔍 Pattern Layer:", data.details?.pattern_verification);
+                    console.log("🌐 Source Credibility Layer:", data.details?.source_credibility);
+                    console.log("📚 Cross-Reference Layer:", data.details?.cross_reference);
+                  }
+                }, 600); // 3 steps x 600ms = ~1.8s total
+              } catch (err) {
+                console.error("❌ API call failed:", err);
+                setLoading(false);
+              }
+            } else {
+              console.error("Scraping failed.");
+              setLoading(false);
+            }
           }
-        });
+        );
       }
     });
   };
+
 
   return (
     <div className="min-h-[400px] w-[300px] px-3 py-3 bg-background text-foreground rounded-xl border border-violet-500 shadow-lg flex flex-col justify-between transition-all duration-500 mx-auto">
@@ -157,25 +208,33 @@ const AppContent = () => {
 
 
         {showResult && (
-          <Card className="w-full animate-in fade-in duration-500 px-1">
-            <CardHeader>
-              <CardTitle className="text-lg">Credibility Score</CardTitle>
-              <CardDescription className="text-sm">
-                Based on content analysis
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-2 bg-red-500 rounded-full transition-all"
-                  style={{ width: "74%" }}
-                />
-              </div>
-              <p className="text-sm mt-2 font-semibold text-red-500">
-                74% chance of being fake
-              </p>
-            </CardContent>
-          </Card>
+          <>
+            <Card className="w-full animate-in fade-in duration-500 px-1">
+              <CardHeader>
+                <CardTitle className="text-lg">Credibility Score</CardTitle>
+                <CardDescription className="text-sm">
+                  Based on content analysis
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div
+                    className="h-2 bg-red-500 rounded-full transition-all"
+                    style={{ width: "74%" }}
+                  />
+                </div>
+                <p className="text-sm mt-2 font-semibold">
+                  {resultData?.verdict && `Verdict: ${resultData.verdict}`}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1 italic">
+                  {resultData?.explanation}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* 🔽 Detailed layer breakdown appears below the verdict card */}
+            <ResultDetails resultData={resultData} />
+          </>
         )}
       </div>
 
