@@ -57,13 +57,20 @@ def domain_in_csv(domain):
     return domain in df["domain"].values
 
 def append_to_csv(data):
+    # Skip saving if credibility rating is N/A (i.e., not found in MBFC)
+    if data.get("credibility_rating", "N/A") == "N/A":
+        print(f"⚠️ Not adding '{data['domain']}' to CSV because it was not found in MBFC.")
+        return
+
     if not os.path.exists(csv_path):
         df = pd.DataFrame(columns=["domain", "bias", "credibility_rating", "score", "source", "reason"])
     else:
         df = pd.read_csv(csv_path)
+
     df = pd.concat([df, pd.DataFrame([data])], ignore_index=True)
     df.to_csv(csv_path, index=False)
     print(f"✅ Added {data['domain']} to sources_db.csv")
+
 
 def get_source_credibility(domain):
     if domain_in_csv(domain):
