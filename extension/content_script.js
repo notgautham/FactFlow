@@ -18,14 +18,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       tempElement.innerHTML = content;
       const plainText = tempElement.innerText.trim();
 
+      // ✅ Clean the domain URL
+      const fullUrl = window.location.href;
+      const urlObj = new URL(fullUrl);
+      const hostname = urlObj.hostname.replace(/^www\./, ""); // removes 'www.'
+      const cleanedUrl = hostname; // final result: 'livemint.com'
+
       console.log("[FactFlow] Title:", title);
-      console.log("[FactFlow] Cleaned Content:", plainText.slice(0, 3000)); // Preview first 500 chars
+      console.log("[FactFlow] Cleaned Content:", plainText.slice(0, 3000));
+      console.log("[FactFlow] Domain URL:", cleanedUrl);
 
       // Send response back to popup
-      sendResponse({ scrapedText: `${title}\n\n${plainText}` });
+      sendResponse({
+        scrapedText: `${title}\n\n${plainText}`,
+        domain: cleanedUrl,
+      });
     } catch (error) {
       console.error("Readability failed:", error);
-      sendResponse({ scrapedText: "" });
+      sendResponse({ scrapedText: "", domain: "" });
     }
 
     // Indicate async response

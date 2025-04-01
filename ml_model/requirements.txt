@@ -7,3 +7,9 @@ scikit-learn
 optuna
 wandb
 HuggingFaceDatasets
+fastapi
+uvicorn
+pydantic
+python-dotenv
+google-generativeai
+

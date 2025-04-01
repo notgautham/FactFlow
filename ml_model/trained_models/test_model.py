@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
 # Point to the trained model
-MODEL_PATH = "ml_model/trained_models/model_3class_v2"
+MODEL_PATH = "./model_3class_v2"
 NUM_CLASSES = 3
 
 # Load model and tokenizer
