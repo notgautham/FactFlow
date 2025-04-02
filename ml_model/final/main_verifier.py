@@ -101,64 +101,80 @@ def decide_final_verdict(pattern: dict, source: dict, factual: dict) -> dict:
     pattern_label = (pattern.get("label") or "").upper()
     factual_verdict = (factual.get("verdict") or "").lower()
 
-    raw_score = source.get("score", 0)
+    source_rating = (source.get("credibility_rating") or "").lower()
     try:
-        score = int(raw_score)
+        score = int(source.get("score", 0))
     except (ValueError, TypeError):
         score = 0
-    source_rating = (source.get("credibility_rating") or "").lower()
 
-    # CASE 1: Strong fake indicators from source
+    is_source_not_rated = source_rating in ["n/a", "not rated"]
+
+    # 🔴 STRONG FAKE SIGNALS (Layer 2 or 3)
     if source_rating in ["satire", "questionable"] or 0 < score < 20:
         return {
             "verdict": "Fake",
             "explanation": "The source is classified as satire or extremely low credibility, and cannot be trusted for factual content."
         }
 
-    # CASE 2: Cross-reference says false
     if factual_verdict == "factually incorrect":
-        return {
-            "verdict": "Fake",
-            "explanation": "The article contains multiple factually incorrect claims."
-        }
-
-    # CASE 3: Mixed evidence with style/bias/factual uncertainty
-    if pattern_label in ["FAKE", "SOFT_FAKE"] or factual_verdict == "somewhat factual":
-        return {
-            "verdict": "Soft Fake",
-            "explanation": "The article contains speculative, sensational, or stylistically misleading content, even if not completely false."
-        }
-
-    # CASE 4: All layers confirm quality + source is known and trusted
-    if pattern_label == "REAL" and factual_verdict == "factual" and (score >= 70 or source_rating == "high"):
-        return {
-            "verdict": "Likely Real",
-            "explanation": "The article is stylistically reliable, factually accurate, and from a trusted source."
-        }
-
-    # CASE 5: Source Not Rated – rely on other layers
-    if source_rating.lower() in ["n/a", "not rated"]:
-        if pattern_label == "REAL" and factual_verdict == "factual":
-            return {
-                "verdict": "Likely Real",
-                "explanation": "The source is not rated, but the article is stylistically sound and factually accurate."
-            }
-        elif pattern_label == "REAL" and factual_verdict == "somewhat factual":
-            return {
-                "verdict": "Uncertain",
-                "explanation": "The source is not rated. While the writing style is credible, some claims lack verification."
-            }
-        elif pattern_label in ["FAKE", "SOFT_FAKE"] and factual_verdict == "factual":
-            return {
-                "verdict": "Soft Fake",
-                "explanation": "Despite factual accuracy, the writing style shows signs of clickbait or sensationalism."
-            }
-        elif factual_verdict == "factually incorrect":
+        if score < 50 or is_source_not_rated:
             return {
                 "verdict": "Fake",
-                "explanation": "Even though the source is not rated, the article has been found to contain incorrect claims."
+                "explanation": "The article contains factually incorrect claims and either comes from an untrusted or unknown source."
+            }
+        else:
+            return {
+                "verdict": "Soft Fake",
+                "explanation": "Despite coming from a moderately credible source, the article has verifiable factual inaccuracies."
             }
 
+    # 🟠 MIXED / STYLISTIC CONCERNS
+    if factual_verdict == "somewhat factual":
+        if pattern_label in ["FAKE", "SOFT_FAKE"]:
+            return {
+                "verdict": "Soft Fake",
+                "explanation": "The article contains speculative or stylistically misleading content, with some factual inconsistencies."
+            }
+        elif pattern_label == "REAL":
+            if score >= 70:
+                return {
+                    "verdict": "Uncertain",
+                    "explanation": "The article is from a trusted source and is well-written, but has some factual inconsistencies."
+                }
+            elif is_source_not_rated:
+                return {
+                    "verdict": "Uncertain",
+                    "explanation": "The article is written credibly and partially factual, but the source is not rated."
+                }
+            else:
+                return {
+                    "verdict": "Soft Fake",
+                    "explanation": "Despite good style, the article has factual gaps and originates from a moderately rated source."
+                }
+
+    # 🟢 ALL GOOD
+    if factual_verdict == "factual":
+        if pattern_label == "REAL":
+            if score >= 70 or source_rating == "high":
+                return {
+                    "verdict": "Likely Real",
+                    "explanation": "The article is factually accurate, written in a credible style, and comes from a highly rated source."
+                }
+            elif is_source_not_rated:
+                return {
+                    "verdict": "Likely Real",
+                    "explanation": "The article is factually accurate and well-written, although the source is not rated."
+                }
+            else:
+                return {
+                    "verdict": "Uncertain",
+                    "explanation": "The article seems accurate and well-written, but the source has only moderate credibility."
+                }
+        elif pattern_label in ["SOFT_FAKE", "FAKE"]:
+            return {
+                "verdict": "Soft Fake",
+                "explanation": "While the article is factually correct, its writing style reflects clickbait or emotional manipulation."
+            }
 
     # Default fallback
     return {
