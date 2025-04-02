@@ -17,17 +17,24 @@ def check_article_factuality(article_text):
     prompt_template = f"""
 You are a fact-checking expert. Carefully read the following news article and determine its factual accuracy.
 
-🗓️ Publication Date: It is given in the starting of the content
+🗓️ Publication Date: The article was published on the date given in the starting of the article content. Treat this as the current time and your reference frame for evaluating all claims.
 
 Instructions:
-1. Assume the article's publication date is your current point in time. Treat this as your **factual world**.
-2. All evaluations must use that date as the present. Do not rely on your model's internal date. Assume the article is set in a real and valid timeline unless something contradicts known facts as of that date.
-3. ⚠️ Do NOT reject or dispute claims simply because you are unaware of recent developments. Only flag claims that are provably false or logically inconsistent **based on verified knowledge up to and including the publication date**.
-4. If you cannot verify or refute a claim, or if it is plausible but unconfirmed, **skip it**.
-5. Do not use speculative language like “requires confirmation” or “seems unusual.” This layer only flags **clear factual errors**.
-6. Include only the clearly false or impossible claims in the `issues` list.
-7. If the article appears fully accurate, return a `verdict` of `"factual"`.
+1. Assume the article’s timeline is valid. If it states that Donald Trump is President, accept that as true for the purposes of fact-checking.
+2. Do NOT compare your own internal knowledge of events or timelines with the article's stated facts. Focus only on contradictions or impossibilities **within the article itself** or based on well-established facts known up to that date.
+3. If a claim is unfamiliar, speculative, or forward-looking (e.g., “will happen tomorrow”), that is not a factual error. Only flag a claim if it is clearly, provably false.
+4. Tolerate common journalistic phrasing, such as:
+   - “Expected to...” / “Set to announce...” / “May lead to...”
+   - Same-day predictions or embargoed events
+   - Partial market data reported intraday or post-close
+   - Quotes from public officials or spokespersons
+5. Do NOT flag stylistic or speculative statements as factual errors.
+6. Skip any claims that cannot be confidently confirmed or refuted using information valid on or before the article’s publication date.
 
+📊 VERDICT RULES:
+- Use `"factual"` if there are no factual errors or only minor harmless phrasing inconsistencies.
+- Use `"somewhat factual"` if there are 1–2 small factual inaccuracies that don't change the overall message.
+- Use `"factually incorrect"` ONLY if there are multiple serious factual errors that mislead the reader or contradict reality.
 
 ⚠️ Output Format (strict JSON):
 {{

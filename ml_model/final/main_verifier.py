@@ -3,7 +3,6 @@ from ml_model.source_credibility.fallback_lookup import get_source_credibility
 from ml_model.cross_reference.fact_checker import check_article_factuality
 from urllib.parse import urlparse
 
-
 def run_all_verifications(title: str, content: str, url: str) -> dict:
     full_text = title.strip() + "\n" + content.strip()
     result = {"details": {}}
@@ -37,7 +36,6 @@ def run_all_verifications(title: str, content: str, url: str) -> dict:
         domain = extract_domain(url)
         source_result = get_source_credibility(domain)
 
-        # Safely convert score to int
         raw_score = source_result.get("score", 0)
         try:
             score = int(raw_score)
@@ -80,19 +78,16 @@ def run_all_verifications(title: str, content: str, url: str) -> dict:
         print("❌ Cross Reference Failed:", e)
         result["details"]["cross_reference"] = {"error": str(e)}
 
-    # Final Verdict Decision with Advanced Logic
+    # Final Verdict
     print("🧠 Computing Final Verdict...")
     final = decide_final_verdict(
         result["details"].get("pattern_verification", {}),
         result["details"].get("source_credibility", {}),
         result["details"].get("cross_reference", {})
     )
-    final_verdict = final["verdict"]
-    explanation = final["explanation"]
-    result["verdict"] = final_verdict
-    result["explanation"] = explanation
-    print("✅ Verdict:", final_verdict)
-
+    result["verdict"] = final["verdict"]
+    result["explanation"] = final["explanation"]
+    print("✅ Verdict:", final["verdict"])
     return result
 
 
@@ -103,48 +98,70 @@ def extract_domain(url: str) -> str:
 
 
 def decide_final_verdict(pattern: dict, source: dict, factual: dict) -> dict:
-    # Extract and normalize values
-    pattern_label = (pattern.get("label") or "").upper()  # e.g. "FAKE", "SOFT_FAKE", "REAL"
-    factual_verdict = (factual.get("verdict") or "").lower()  # e.g. "factually incorrect", "somewhat factual", "factual"
-    
+    pattern_label = (pattern.get("label") or "").upper()
+    factual_verdict = (factual.get("verdict") or "").lower()
+
     raw_score = source.get("score", 0)
     try:
         score = int(raw_score)
     except (ValueError, TypeError):
         score = 0
-    source_rating = (source.get("credibility_rating") or "").lower()  # e.g. "high", "satire", "mixed"
+    source_rating = (source.get("credibility_rating") or "").lower()
 
-    # Advanced decision tree:
-    # CASE 1: If the source is a known satire or has extremely low score, it's Fake.
-    if source_rating in ["satire", "questionable"] or score < 20:
+    # CASE 1: Strong fake indicators from source
+    if source_rating in ["satire", "questionable"] or 0 < score < 20:
         return {
             "verdict": "Fake",
-            "explanation": "The source is identified as satirical or extremely low-credibility, and the content is not meant to be taken as factual."
+            "explanation": "The source is classified as satire or extremely low credibility, and cannot be trusted for factual content."
         }
 
-    # CASE 2: If cross-reference shows factually incorrect, final verdict must be Fake.
+    # CASE 2: Cross-reference says false
     if factual_verdict == "factually incorrect":
         return {
             "verdict": "Fake",
             "explanation": "The article contains multiple factually incorrect claims."
         }
 
-    # CASE 3: If pattern is suspicious (FAKE or SOFT_FAKE) or cross-reference is somewhat factual, mark as Soft Fake.
+    # CASE 3: Mixed evidence with style/bias/factual uncertainty
     if pattern_label in ["FAKE", "SOFT_FAKE"] or factual_verdict == "somewhat factual":
         return {
             "verdict": "Soft Fake",
-            "explanation": "The article shows speculative or partially unverified claims or stylistic signs of sensationalism."
+            "explanation": "The article contains speculative, sensational, or stylistically misleading content, even if not completely false."
         }
 
-    # CASE 4: If pattern is REAL, cross-reference is factual, and source is highly credible, mark as Likely Real.
+    # CASE 4: All layers confirm quality + source is known and trusted
     if pattern_label == "REAL" and factual_verdict == "factual" and (score >= 70 or source_rating == "high"):
         return {
             "verdict": "Likely Real",
-            "explanation": "All signals indicate that the article is factual and comes from a highly credible source."
+            "explanation": "The article is stylistically reliable, factually accurate, and from a trusted source."
         }
 
-    # Default fallback if signals are mixed.
+    # CASE 5: Source Not Rated – rely on other layers
+    if source_rating.lower() in ["n/a", "not rated"]:
+        if pattern_label == "REAL" and factual_verdict == "factual":
+            return {
+                "verdict": "Likely Real",
+                "explanation": "The source is not rated, but the article is stylistically sound and factually accurate."
+            }
+        elif pattern_label == "REAL" and factual_verdict == "somewhat factual":
+            return {
+                "verdict": "Uncertain",
+                "explanation": "The source is not rated. While the writing style is credible, some claims lack verification."
+            }
+        elif pattern_label in ["FAKE", "SOFT_FAKE"] and factual_verdict == "factual":
+            return {
+                "verdict": "Soft Fake",
+                "explanation": "Despite factual accuracy, the writing style shows signs of clickbait or sensationalism."
+            }
+        elif factual_verdict == "factually incorrect":
+            return {
+                "verdict": "Fake",
+                "explanation": "Even though the source is not rated, the article has been found to contain incorrect claims."
+            }
+
+
+    # Default fallback
     return {
         "verdict": "Uncertain",
-        "explanation": "The evidence from the verification layers is mixed or inconclusive."
+        "explanation": "The evidence from the verification layers is mixed or insufficient to make a clear decision."
     }
