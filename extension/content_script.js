@@ -13,9 +13,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const content = article?.content || "";
 
       // Strip HTML tags
+      // Strip HTML tags
       const tempElement = document.createElement("div");
       tempElement.innerHTML = content;
       const plainText = tempElement.innerText.trim();
+
+      // 🧹 Clean up empty lines
+      const cleanedText = plainText
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0)
+        .join("\n\n"); // Optional: Add spacing between meaningful lines
 
       // Clean domain URL
       const fullUrl = window.location.href;
@@ -57,7 +65,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       publishDate = publishDate || "Not found";
 
       // Prepend date to content text block
-      const formattedText = `[📅 Published On: ${publishDate}]\n\n${plainText}`;
+      const formattedText = `[📅 Published On: ${publishDate}]\n\n${cleanedText}`;
 
       sendResponse({
         scrapedText: `${title}\n\n${formattedText}`,
@@ -70,7 +78,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.log("[FactFlow] Cleaned Content:", formattedText.slice(0, 200));
       console.log("[FactFlow] Domain URL:", cleanedUrl);
       console.log("[FactFlow] Publish Date:", publishDate);
-
     } catch (error) {
       console.error("Readability failed:", error);
       sendResponse({ scrapedText: "", domain: "", publishDate: "" });
