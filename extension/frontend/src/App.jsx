@@ -4,6 +4,7 @@ import CircularProgress from "@/components/ui/circular-progress";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useTheme } from "next-themes";
 import ResultDetails from "./components/ResultDetails";
+import CredibilityBar from "./components/ui/CredibilityBar";
 
 
 import {
@@ -217,12 +218,10 @@ const AppContent = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-2 bg-red-500 rounded-full transition-all"
-                    style={{ width: "74%" }}
-                  />
-                </div>
+                <CredibilityBar
+                  verdict={resultData?.verdict}
+                  probability={resultData?.fake_probability}
+                />
                 <p className="text-sm mt-2 font-semibold">
                   {resultData?.verdict && `Verdict: ${resultData.verdict}`}
                 </p>
