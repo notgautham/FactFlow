@@ -1,12 +1,10 @@
 torch
 transformers
-spacy
 pandas
 numpy
 scikit-learn
 optuna
 wandb
-HuggingFaceDatasets
 fastapi
 uvicorn
 pydantic
