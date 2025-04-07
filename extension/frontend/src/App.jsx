@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-//import { ThemeProvider, useTheme } from "@/components/theme-provider";
 import CircularProgress from "@/components/ui/circular-progress";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useTheme } from "next-themes";
 import ResultDetails from "./components/ResultDetails";
 import CredibilityBar from "./components/ui/CredibilityBar";
-
 
 import {
   Card,
@@ -36,7 +34,7 @@ const AppContent = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const showDebugInfo = false; // Toggle this off for production
   const [resultData, setResultData] = useState(null);
-
+  const [errorMessage, setErrorMessage] = useState(""); // New error state
 
   // For demo: Animate fake loading progress
   const animateProgress = () => {
@@ -47,8 +45,6 @@ const AppContent = () => {
       if (i >= 100) clearInterval(interval);
     }, 25);
   };
-
-  
 
   useEffect(() => {
     let interval;
@@ -72,6 +68,7 @@ const AppContent = () => {
   }, [loading]);
 
   const handleAnalyze = () => {
+    setErrorMessage(""); // Clear any previous error
     setProgress(0);
     setTaskIndex(0);
     setShowResult(false);
@@ -79,6 +76,14 @@ const AppContent = () => {
     setResultData(null); // clear previous results
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // Check if the current tab is a valid webpage (URL should start with "http")
+      const tabUrl = tabs[0]?.url || "";
+      if (!tabUrl.startsWith("http")) {
+        setErrorMessage("This is not a valid webpage.");
+        setLoading(false);
+        return;
+      }
+
       if (tabs[0]?.id) {
         chrome.tabs.sendMessage(
           tabs[0].id,
@@ -104,7 +109,7 @@ const AppContent = () => {
                 console.log("✅ Raw API response (before animation):", data);
                 setResultData(data); // save result for rendering
 
-                // 👇 Layered simulation with visual + console output
+                // Layered simulation with visual + console output
                 let step = 0;
                 const interval = setInterval(() => {
                   step += 1;
@@ -116,7 +121,7 @@ const AppContent = () => {
                     setLoading(false);
                     setShowResult(true);
 
-                    // ✅ Debug logs after result is ready
+                    // Debug logs after result is ready
                     console.log("✅ Full API Response:");
                     console.log("👉 Verdict:", data.verdict);
                     console.log("👉 Explanation:", data.explanation);
@@ -138,7 +143,6 @@ const AppContent = () => {
       }
     });
   };
-
 
   return (
     <div className="min-h-[400px] w-[300px] px-3 py-3 bg-background text-foreground rounded-xl border border-violet-500 shadow-lg flex flex-col justify-between transition-all duration-500 mx-auto">
@@ -164,15 +168,9 @@ const AppContent = () => {
               Your personal AI fact checker
             </p>
             <ul className="text-sm text-muted-foreground space-y-1">
-              <li className="transition hover:text-violet-400">
-                ✔️ Pattern-based content scan
-              </li>
-              <li className="transition hover:text-violet-400">
-                ✔️ Source credibility check
-              </li>
-              <li className="transition hover:text-violet-400">
-                ✔️ Cross-referenced verification
-              </li>
+              <li className="transition hover:text-violet-400">✔️ Pattern-based content scan</li>
+              <li className="transition hover:text-violet-400">✔️ Source credibility check</li>
+              <li className="transition hover:text-violet-400">✔️ Cross-referenced verification</li>
             </ul>
           </>
         )}
@@ -184,18 +182,14 @@ const AppContent = () => {
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center space-y-2 mt-2">
               <CircularProgress progress={progress} />
-              <p className="text-xs text-muted-foreground mt-2">
-                {LoadingTasks[taskIndex]}
-              </p>
+              <p className="text-xs text-muted-foreground mt-2">{LoadingTasks[taskIndex]}</p>
             </CardContent>
 
             {/* 🔍 Temporary Debug Section: Scraped Preview */}
             {showDebugInfo && scrapedText && (
               <Card className="mt-4 bg-muted/40 border border-muted-foreground/10 rounded-xl shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-sm">
-                    🔍 Scraped Text Preview (Dev Only)
-                  </CardTitle>
+                  <CardTitle className="text-sm">🔍 Scraped Text Preview (Dev Only)</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs text-muted-foreground line-clamp-[10] whitespace-pre-wrap max-h-48 overflow-auto">
@@ -207,21 +201,15 @@ const AppContent = () => {
           </div>
         )}
 
-
         {showResult && (
           <>
             <Card className="w-full animate-in fade-in duration-500 px-1">
               <CardHeader>
                 <CardTitle className="text-lg">Credibility Score</CardTitle>
-                <CardDescription className="text-sm">
-                  Based on content analysis
-                </CardDescription>
+                <CardDescription className="text-sm">Based on content analysis</CardDescription>
               </CardHeader>
               <CardContent>
-                <CredibilityBar
-                  verdict={resultData?.verdict}
-                  probability={resultData?.fake_probability}
-                />
+                <CredibilityBar verdict={resultData?.verdict} probability={resultData?.fake_probability} />
                 <p className="text-sm mt-2 font-semibold">
                   {resultData?.verdict && `Verdict: ${resultData.verdict}`}
                 </p>
@@ -231,7 +219,7 @@ const AppContent = () => {
               </CardContent>
             </Card>
 
-            {/* 🔽 Detailed layer breakdown appears below the verdict card */}
+            {/* Detailed layer breakdown */}
             <ResultDetails resultData={resultData} />
           </>
         )}
@@ -248,9 +236,11 @@ const AppContent = () => {
             <span className="absolute inset-0 bg-violet-300 opacity-0 group-hover:opacity-20 blur-md transition-all duration-500" />
           </Button>
         )}
-        <p className="text-xs text-muted-foreground italic mt-1">
-          🔍 Results powered by AI
-        </p>
+        {/* Display error message if present */}
+        {errorMessage && (
+          <p className="text-xs text-red-500 italic mt-1">{errorMessage}</p>
+        )}
+        <p className="text-xs text-muted-foreground italic mt-1">🔍 Results powered by AI</p>
       </div>
     </div>
   );
