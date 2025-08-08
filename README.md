@@ -81,7 +81,7 @@ FactFlow analyzes content using **three distinct yet complementary layers**:
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
 
 
-## 🖼️ Screenshots
+## 🖼️ Screenshots, Demo
 
 <p align="center">
   <img src="images/frontend1.png" width="270" alt="FactFlow Extension UI"/>
@@ -89,7 +89,9 @@ FactFlow analyzes content using **three distinct yet complementary layers**:
   <img src="images/frontend3.png" width="220" alt="Credibility Verdicts"/>
   &nbsp;&nbsp;&nbsp;
   <img src="images/frontend4.png" width="220" alt="Real-Time Analysis Loader"/>
+  <img src=images/demo.gif width="750">
 </p>
+
 
 
 > 🎥 The extension scans the page, runs all 3 verification layers in real-time, and displays a final verdict with animated feedback and progress tracking.
