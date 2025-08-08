@@ -84,11 +84,11 @@ FactFlow analyzes content using **three distinct yet complementary layers**:
 ## 🖼️ Live Demo
 
 <p align="center">
-  <img src="images/frontend1.png" width="306" alt="FactFlow Extension UI"/>
+  <img src="images/frontend1.png" width="270" alt="FactFlow Extension UI"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="images/frontend3.png" width="250" alt="Credibility Verdicts"/>
+  <img src="images/frontend3.png" width="220" alt="Credibility Verdicts"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="images/frontend4.png" width="250" alt="Real-Time Analysis Loader"/>
+  <img src="images/frontend4.png" width="220" alt="Real-Time Analysis Loader"/>
 </p>
 
 
