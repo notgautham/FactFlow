@@ -109,7 +109,7 @@ def decide_final_verdict(pattern: dict, source: dict, factual: dict) -> dict:
 
     is_source_not_rated = source_rating in ["n/a", "not rated"]
 
-    # 🔴 STRONG FAKE SIGNALS (Layer 2 or 3)
+    # STRONG FAKE SIGNALS (Layer 2 or 3)
     if source_rating in ["satire", "questionable"] or 0 < score < 20:
         return {
             "verdict": "Fake",
@@ -128,7 +128,7 @@ def decide_final_verdict(pattern: dict, source: dict, factual: dict) -> dict:
                 "explanation": "Despite coming from a moderately credible source, the article has verifiable factual inaccuracies."
             }
 
-    # 🟠 MIXED / STYLISTIC CONCERNS
+    # MIXED / STYLISTIC CONCERNS
     if factual_verdict == "somewhat factual":
         if pattern_label in ["FAKE", "SOFT_FAKE"]:
             return {
@@ -152,7 +152,7 @@ def decide_final_verdict(pattern: dict, source: dict, factual: dict) -> dict:
                     "explanation": "Despite good style, the article has factual gaps and originates from a moderately rated source."
                 }
 
-    # 🟢 ALL GOOD
+    # ALL GOOD
     if factual_verdict == "factual":
         if pattern_label == "REAL":
             if score >= 70 or source_rating == "high":
