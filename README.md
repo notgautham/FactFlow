@@ -81,7 +81,7 @@ FactFlow analyzes content using **three distinct yet complementary layers**:
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
 
 
-## 🖼️ Live Demo
+## 🖼️ Screenshots
 
 <p align="center">
   <img src="images/frontend1.png" width="270" alt="FactFlow Extension UI"/>
